@@ -1,0 +1,55 @@
+image: python:3.8
+services:
+  - name: postgres:latest
+    alias: postgres
+cache:
+  paths:
+    - ~/.cache/pip/
+
+
+before_script:
+  - python3 -V
+  - pip3 -V
+  - pip3 install docker-compose
+  - pip3 install requests
+  - pip3 install -r requirements.txt
+  - rm pytest.ini
+  - mv pytest-test.ini pytest.ini
+  - export DJANGO_SETTINGS_MODULE=paystackcollection.git-cicd-settings
+  
+stages:
+  - unit_test
+  - deploy
+
+unit_testing:
+  stage: unit_test
+  variables:
+    POSTGRES_DB: postgres
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ""
+    POSTGRES_HOST_AUTH_METHOD: trust
+  only:
+    - development
+    - master
+  script:  
+    - python3 manage.py makemigrations
+    - python3 manage.py makemigrations gateways common customers mandates pipeline staff users
+    - python3 manage.py migrate
+    - python3 manage.py test
+    - python3 -m pytest
+
+deploying_production:
+  stage: deploy
+  variables:
+    POSTGRES_DB: postgres
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ""
+    POSTGRES_HOST_AUTH_METHOD: trust
+  only:
+    - master
+  script:
+    - python3 -m pytest
+  environment:
+    name: production
+  when: manual # <- used when you want to manually run the job
+  

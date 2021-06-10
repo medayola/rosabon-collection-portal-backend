@@ -1,0 +1,14 @@
+[
+    {
+        "model": "common.state",
+        "pk": 1,
+        "fields": {
+            "name": "Lagos State",
+            "abbreviation": "LAG",
+            "is_deleted": false,
+            "created_at": "2020-04-05",
+            "updated_at": "2020-04-05",
+            "deleted_at": null
+        }
+    }
+]

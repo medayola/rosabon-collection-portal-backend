@@ -1,0 +1,9 @@
+#!/bin/sh
+GIT_WORK_TREE=/var/src_codes/collections/ git checkout -f master
+
+# copy the build folder into the collection html path
+service apache2 reload
+rm -r /var/www/html/collections/*
+mkdir /var/www/html/collections
+cp -r /var/src_codes/collections/build/* /var/www/html/collections/
+cp -r /var/src_codes/collections/.htaccess /var/www/html/collections/

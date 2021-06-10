@@ -1,0 +1,57 @@
+[
+    {
+        "model": "staff.staffcategory",
+        "pk": 3,
+        "fields": {
+            "name": "Super-Admin",
+            "group": null,
+            "is_deleted": false,
+            "created_at": "2020-04-04",
+            "updated_at": "2020-04-04"
+        }
+    },
+    {
+        "model": "staff.staffcategory",
+        "pk": 4,
+        "fields": {
+            "name": "Head Collections",
+            "group": 4,
+            "is_deleted": false,
+            "created_at": "2020-04-29",
+            "updated_at": "2020-04-29"
+        }
+    },
+    {
+        "model": "staff.staffcategory",
+        "pk": 5,
+        "fields": {
+            "name": "Collections Officer",
+            "group": 2,
+            "is_deleted": false,
+            "created_at": "2020-04-29",
+            "updated_at": "2020-04-29"
+        }
+    },
+    {
+        "model": "staff.staffcategory",
+        "pk": 6,
+        "fields": {
+            "name": "Underwriter",
+            "group": 5,
+            "is_deleted": false,
+            "created_at": "2020-04-29",
+            "updated_at": "2020-04-29"
+        }
+    },
+    {
+        "model": "staff.staffcategory",
+        "pk": 7,
+        "fields": {
+            "name": "sdteam",
+            "group": 6,
+            "is_deleted": false,
+            "created_at": "2020-06-01",
+            "updated_at": "2020-06-01"
+        }
+    }
+]

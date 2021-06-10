@@ -1,0 +1,3 @@
+
+class Remitta:
+    pass

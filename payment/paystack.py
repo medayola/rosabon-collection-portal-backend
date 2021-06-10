@@ -1,0 +1,2 @@
+class Paystack:
+    pass

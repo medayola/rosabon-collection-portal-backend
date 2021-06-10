@@ -1,0 +1,50 @@
+[
+    {
+        "model": "auth.group",
+        "pk": 10,
+        "fields": {
+            "name": "root",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 12,
+        "fields": {
+            "name": "Collections Officer",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 13,
+        "fields": {
+            "name": "Customer",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 14,
+        "fields": {
+            "name": "Head Collections",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 15,
+        "fields": {
+            "name": "Underwriter",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 16,
+        "fields": {
+            "name": "Admin",
+            "permissions": []
+        }
+    }
+]

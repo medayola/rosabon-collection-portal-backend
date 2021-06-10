@@ -1,0 +1,1 @@
+[{"model": "staff.staff", "pk": 67, "fields": {"user": 118, "tel": "09020000001", "gender": "M", "person_type": "S", "is_deleted": false, "created_at": "2020-06-20", "updated_at": "2020-06-21", "is_account_officer": true, "category": 1, "department": 3}}]

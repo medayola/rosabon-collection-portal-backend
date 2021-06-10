@@ -1,0 +1,21 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ci',
+        'HOST': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'PORT': '5432'
+    },
+    'replica': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ci',
+        'HOST': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'PORT': '5432'
+        'TEST': {
+            'MIRROR': 'default'
+        }
+    }
+}
