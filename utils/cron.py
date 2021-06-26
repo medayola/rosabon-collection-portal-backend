@@ -391,7 +391,8 @@ def send_weekly_report():
         't.odubayo@rosabon-finance.com',
         'i.patrick@rosabon-finance.com',
         'a.iwelumor@rosabon-finance.com',
-        'hemen.hirekaan@concept-nova.com',
+        'fatimah.alayaki@concept-nova.com',
+
     ]
 
     subject = weekly_report.generator.printer.filename.split('.')[0]

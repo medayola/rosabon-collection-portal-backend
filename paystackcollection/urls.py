@@ -20,12 +20,13 @@ from django.urls import path, re_path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
-from payment.views.paystack_view import PaystackPayment
+from payment.views.paystack_view import PaystackPayment, PaystackWebhook
 from paystackcollection.schema import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^paystack.verification/$', PaystackPayment.as_view()),
+    re_path(r'^paystack-webhook/$', PaystackWebhook.as_view()),
     path('graph-ql/', csrf_exempt(GraphQLView.as_view(
         graphiql=False, schema=schema))),
 ]
