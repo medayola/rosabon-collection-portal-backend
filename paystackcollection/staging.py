@@ -194,6 +194,7 @@ DATABASES = {
 ALLOWED_HOSTS = [
     '157.245.8.141',
     '127.0.0.1',
+    'localhost',
 ]
 
 CORS_ORIGIN_WHITELIST = [
