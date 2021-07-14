@@ -36,14 +36,13 @@ class PaystackWebhook(APIView):
             # check if content exists
             data = request.data
             if data is None:
-                # raise Exception("No data")
-                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+                raise Exception("No data")
+                # return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
 
             # check hash headers
             paystack_hash = request.headers.get('x-paystack-signature', None)
             if paystack_hash is None:
-                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
-                # raise Exception("x-paystack-signature required")
+                raise Exception("x-paystack-signature required")
 
             # verify paystack signature
             print(data)
@@ -53,8 +52,7 @@ class PaystackWebhook(APIView):
             new_hash = hmac.new(bytes(settings.PAYSTACK_AUTHORIZATION_KEY,"UTF-8"), paybytes, hashlib.sha512).hexdigest()
             print(new_hash)
             if paystack_hash != new_hash:
-                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
-                # raise Exception("Invalid signature.")
+                raise Exception("Invalid signature.")
 
 
             # get event data
