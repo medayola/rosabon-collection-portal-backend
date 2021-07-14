@@ -69,7 +69,7 @@ class Customer(Person):
         related_name='customers',
         on_delete=models.CASCADE,
         blank=True,
-        null=True)
+        null=False)
     """ the branch the customer was created at """
 
     created_by = models.ForeignKey(

@@ -125,6 +125,47 @@ class Mandate(models.Model):
 
         return False
 
+    @property
+    def get_outstanding(self):
+        """
+            method to get the total outstanding balance for the mandate
+        """
+
+        return self.rentals.filter(collection_status=Rental.PENDING).count()
+
+    @property
+    def get_pending(self):
+        """
+            method to get the pending balance for the mandate
+        """
+
+        return self.rentals.filter(collection_status=Rental.PENDING, collection_date__lt=datetime.date.today()).count()
+
+    @property
+    def get_start_date(self):
+        """
+            method to get the mandates start date
+        """
+
+        return self.rentals.last().collection_date
+
+    @property
+    def get_end_date(self):
+        """
+            method to get the mandates end date
+        """
+
+        return self.rentals.first().collection_date
+
+    @property
+    def get_due_date(self):
+        """
+            method to get the mandates end date
+        """
+
+        return self.initial_repayment_date
+
+
     PAYSTACK = "PAYSTACK"
     REMITTA = "REMITTA"
     PAYMENT_GATEWAYS = [
@@ -137,12 +178,14 @@ class Mandate(models.Model):
     DECLINED = "DECLINED"
     DEACTIVATED = "DEACTIVATED"
     MATURED = "MATURED"
+    OUTSTANDING="OUTSTANDING"
     STATUS = [
         (PENDING, "PENDING CUSTOMER APPROVAL"),
         (DECLINED, "DECLINED"),
         (ACTIVE, "ACTIVE"),
         (DEACTIVATED, "DEACTIVATED"),
         (MATURED, "MATURED"),
+        (OUTSTANDING, "OUTSTANDING"),
     ]
 
     customer = models.ForeignKey(
@@ -223,6 +266,7 @@ class Rental(models.Model):
     MANUAL_SUCCESS = "MANUAL SUCCESS"
     FAILED = "FAILED"
     STOPPED = "STOPPED"
+    OUTSTANDING = "OUTSTANDING"
 
     STATUS = [
         (PENDING, "PENDING"),
@@ -231,6 +275,8 @@ class Rental(models.Model):
         (MANUAL_SUCCESS, "MANUAL_SUCCESS"),
         (FAILED, "FAILED"),
         (STOPPED, "STOPPED"),
+        (OUTSTANDING, "OUTSTANDING"),
+
     ]
 
     mandate = models.ForeignKey(

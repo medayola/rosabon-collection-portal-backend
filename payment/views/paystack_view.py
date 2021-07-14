@@ -27,36 +27,53 @@ class PaystackPayment(APIView):
 
 class PaystackWebhook(APIView):
 
+    def get(self,request, *args, **kwargs):
+        return Response({"success": True}, status=status.HTTP_200_OK)
+
     def post(self, request, *args, **kwargs):
         try:
             print(request.data)
             # check if content exists
             data = request.data
             if data is None:
-                raise Exception("No data")
+                # raise Exception("No data")
+                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
 
             # check hash headers
             paystack_hash = request.headers.get('x-paystack-signature', None)
             if paystack_hash is None:
-                raise Exception("x-paystack-signature required")
+                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+                # raise Exception("x-paystack-signature required")
 
             # verify paystack signature
+            print(data)
             paybytes = urllib.parse.urlencode(data).encode('utf8')
-            new_hash = hmac.new(settings.PAYSTACK_AUTHORIZATION_KEY, paybytes, hashlib.sha512).hexdigest()
+            print(paybytes)
+
+            new_hash = hmac.new(bytes(settings.PAYSTACK_AUTHORIZATION_KEY,"UTF-8"), paybytes, hashlib.sha512).hexdigest()
+            print(new_hash)
             if paystack_hash != new_hash:
-                raise Exception("Invalid signature.")
+                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+                # raise Exception("Invalid signature.")
+
 
             # get event data
             event = data.get('event', None)
+            print(event)
             if event is None:
-                raise Exception("No event property found")
-
+                # raise Exception("No event property found")
+                return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
             if event == "charge.success":
                 if data.get('data', None):
+                    print("--------------")
                     transaction = data.get('data', None)
+                    print("transaction: ", transaction)
                     if transaction and transaction.get('metadata', None):
                         metadata = transaction.get('metadata')
+                        print("metadata:", metadata)
                         rental_attr = metadata.get('custom_fields')[0]
+                        print("rental_attr",rental_attr)
+
                         if rental_attr.get('variable_name') == "rental_id":
                             rental = Rental.objects.get(
                                 pk=rental_attr.get('value'))
@@ -73,7 +90,9 @@ class PaystackWebhook(APIView):
                                     'message': msg
                                 }
                             )
-                            return Response({"success": True}, status=status.HTTP_200_OK)
+                            return Response({"success": True,"message": "it was successful"}, status=status.HTTP_200_OK)
+
+                    return Response({"error": True,"message":"MetaData not found"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

@@ -148,7 +148,7 @@ class MandateReview(models.Model):
         null=True
     )
 
-    # code such as rrr code for remita
+ # code such as rrr code for remita
     code = models.CharField(max_length=100, blank=True, null=True)
 
     # access code such as extra code field
@@ -162,6 +162,24 @@ class MandateReview(models.Model):
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def get_initial_comment(self):
+        """
+            method to return the initial comment added to the mandate review
+        """
+        if self.mandate.status == Mandate.ACTIVE:
+            return self.comments.last()
+        return None
+
+    @property
+    def get_approval_comment(self):
+        """
+            method to return the final comment added to the mandate review
+        """
+        if self.mandate.status == Mandate.ACTIVE:
+            return self.comments.first()
+        return None
 
 
 class PaymentDetail(models.Model):
