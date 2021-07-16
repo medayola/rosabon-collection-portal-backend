@@ -206,7 +206,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 PAYSTACK_AUTHORIZATION_KEY = 'sk_test_f19608000e260b953cc4af43a6054eac641738b7'
-PAYSTACK_CALLBACK_URL = 'http://157.245.8.141/api.collections/paystack.verification/'
+PAYSTACK_CALLBACK_URL = 'https://treasury-dev.concept-nova.com/api.collections/paystack.verification/'
 PAYSTACK_CALLBACK_PAGE = 'https://www.rosabon-finance.com/'
 PAYSTACK_MIN_AMOUNT = 100000  # 1,000.00 NGN
 PAYSTACK_MAX_AMOUNT = 490000  # 4,900.00 NGN
