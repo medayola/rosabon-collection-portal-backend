@@ -291,6 +291,10 @@ class PandasPrinter:
         payments within a range of dates
         """
 
+
+
+
+
         sheet_data = [
             dict(
                 id=value.rental.mandate.id,
@@ -311,7 +315,7 @@ class PandasPrinter:
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
                 outstanding_rentals=value.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
                 pending_rentals=value.mandate.rentals.filter(
-                    Q(collection_date__lte=end_date, collection_status=Rental.PENDING, )).count(),
+                    Q(collection_date__lte=value.mandate.get_end_date, collection_status=Rental.PENDING, )).count(),
                 mandate_status=value.mandate.status
             )
             for key, value in enumerate(self.data)
@@ -371,7 +375,7 @@ class PandasPrinter:
                     Q(collection_status=Rental.SUCCESS) |
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
                 pending_rentals=value.mandate.rentals.filter(
-                    Q(collection_date__lte=end_date, collection_status=Rental.PENDING, )).count(),
+                    Q(collection_date__lte=value.mandate.get_end_date, collection_status=Rental.PENDING, )).count(),
                 outstanding_rentals=value.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
                 product=value.mandate.product.name,
                 mandate_status=value.mandate.status,
