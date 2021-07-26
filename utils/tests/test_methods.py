@@ -90,6 +90,13 @@ class TestUtilsMethods(TestCase):
         resp = cron.fetch_paystack_payments()
         self.assertEqual(resp, True)
 
+    def test_report(self):
+        # create dummy mandates
+        self.__create_dummy_reports__()
+        resp = cron.mature_mandates()
+
+        self.assertEqual(resp, True)
+
     def test_confirm_payments(self):
         # create dummy mandates
         self.__create_dummy_mandates__()

@@ -70,10 +70,11 @@ class ReportGenerator:
             )
             """ generate the filename """
 
-            self.printer.generate_excd_for_the_range()
+            self.printer.generate_excd_for_the_range(self.end_date)
             """ create the report sheet """
             return True
-        except Exception:
+        except Exception as e:
+            print("The error is ",e)
             return False
 
     def resolve_inflow_recieved(self):
@@ -98,7 +99,7 @@ class ReportGenerator:
             )
             """ generate the filename """
 
-            self.printer.generate_recvd_for_the_range()
+            self.printer.generate_recvd_for_the_range(self.end_date)
             """ create the report sheet """
             return True
         except Exception:
