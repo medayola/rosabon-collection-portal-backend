@@ -68,7 +68,7 @@ class Customer(Person):
         to=Branch,
         related_name='customers',
         on_delete=models.CASCADE,
-        blank=False,
+        blank=True,
         null=True)
     """ the branch the customer was created at """
 
