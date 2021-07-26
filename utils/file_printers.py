@@ -419,6 +419,7 @@ class PandasPrinter:
         Generates an excel sheet to display the weekly report
         for collections unit of CRM
         """
+        print("I want to be sure this is the method")
 
         data = []
         try:
@@ -519,15 +520,17 @@ class PandasPrinter:
                     "Last TRXN Status": last_trxn_status,
                     "Initiated comment": mandate_review.get_initial_comment if mandate_review else None,
                     "Approved comment": mandate_review.get_approval_comment if mandate_review else None,
-                    "Account officer name": mandate.account_officer.name,
-                    "Account officer email": mandate.account_officer.email,
+                    "Account officer name": mandate.account_officer.name(),
+                    "Account officer email": mandate.account_officer.email(),
                     "Mandate status": mandate.status,
                 }
 
                 data.append(dictionary)
             self.sheet_data = data
+            print("this is the data",data)
             return True
-        except Exception:
+        except Exception as e:
+            print(e)
             return False
 
     def print(self):

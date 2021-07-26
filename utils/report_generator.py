@@ -73,8 +73,8 @@ class ReportGenerator:
             self.printer.generate_excd_for_the_range(self.end_date)
             """ create the report sheet """
             return True
-        except Exception as e:
-            print("The error is ",e)
+        except Exception as exc:
+            print("The error is ",exc)
             return False
 
     def resolve_inflow_recieved(self):
@@ -130,7 +130,7 @@ class ReportGenerator:
             )
             print(f'generated: {self.printer.filename}')
             """ generate the filename """
-
+            print("printer data", self.printer.data)
             self.printer.generate_weekly_report(
                 start_date=self.start_date, end_date=self.end_date)
             return True
