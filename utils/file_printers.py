@@ -193,8 +193,7 @@ class PandasPrinter:
                     '%d/%b/%Y')
 
             if last_rental is not None:
-                next_due_date = last_rental.collection_date.strftime(
-                    '%d/%b/%Y')
+                next_due_date = last_rental.collection_date.strftime('%d/%b/%Y')
 
             activated_date = ''
             if v.activated_date is not None:
@@ -203,9 +202,9 @@ class PandasPrinter:
             initial_repayment_date = ''
             if v.initial_repayment_date is not None:
                 due_date = v.initial_repayment_date
-                initial_repayment_date = due_date.strftime('%d/%b/%Y')
+                initial_repayment_date = due_date
                 end_date = due_date + relativedelta(months=int(v.tenure))
-                end_date = end_date.strftime('%d/%b/%Y')
+                end_date = end_date
 
             created_at = ''
             if v.created_at is not None:
@@ -218,10 +217,10 @@ class PandasPrinter:
                 "Customer Name": v.customer.fullname(),
                 "Phone Number": v.customer.tel,
                 "Payer Email": v.customer.email(),
-                "Product": v.product,
+                "Product": v.product.name,
                 "Rental Amount": round(v.amount, 2),
-                "Start Date": initial_repayment_date,
-                "End Date": end_date,
+                "Start Date": initial_repayment_date.strftime('%d/%b/%Y'),
+                "End Date": end_date.strftime('%d/%b/%Y'),
                 "Tenor": v.tenure,
                 "Mandate Status": v.status,
                 "Payer Account": v.customer.bank_detail.account_number,
@@ -236,12 +235,11 @@ class PandasPrinter:
                 "Total Amount Collected": v.total_collected(),
                 "Initial Comment": mandate_review.get_initial_comment if mandate_review else None,
                 "Approval Comment": mandate_review.get_approval_comment if mandate_review else None,
-                "Account officer name": v.account_officer.name,
-                "Account officer email": v.account_officer.email,
+                "Account officer name": v.account_officer.name(),
+                "Account officer email": v.account_officer.email(),
                 "Successful Payments": v.rentals.filter(
                     Q(collection_status=Rental.SUCCESS) |
-                    Q(collection_status=Rental.MANUAL_SUCCESS)
-                ).count(),
+                    Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
                 "Next Due Date": next_due_date,
 
             })
@@ -288,7 +286,7 @@ class PandasPrinter:
 
     def generate_recvd_for_the_range(self, end_date):
 
-        print("This is a test",)
+        print("This is a test")
         """
         Generates an excel sheet to display all the recieved
         payments within a range of dates
@@ -304,18 +302,18 @@ class PandasPrinter:
                 branch=value.rental.mandate.customer.branch,
                 collected_amount=value.collected_amount,
                 product=value.rental.mandate.product.name,
-                start_date=value.mandate.get_start_date,
-                end_date=value.mandate.get_end_date,
-                due_date=value.mandate.get_due_date,
-                last_trxn_date=value.created_at,
+                start_date=value.rental.mandate.get_start_date.strftime('%d/%b/%Y'),
+                end_date=value.rental.mandate.get_end_date.strftime('%d/%b/%Y'),
+                due_date=value.rental.mandate.get_due_date.strftime('%d/%b/%Y'),
+                last_trxn_date=value.created_at.strftime('%d/%b/%Y'),
                 last_trxn_status=value.status,
-                paid_rentals=value.mandate.rentals.filter(
+                paid_rentals=value.rental.mandate.rentals.filter(
                     Q(collection_status=Rental.SUCCESS) |
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
-                outstanding_rentals=value.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
-                pending_rentals=value.mandate.rentals.filter(
+                outstanding_rentals=value.rental.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
+                pending_rentals=value.rental.mandate.rentals.filter(
                     Q(collection_date__lte=end_date, collection_status=Rental.PENDING, )).count(),
-                mandate_status=value.mandate.status
+                mandate_status=value.rental.mandate.status
             )
             for key, value in enumerate(self.data)
         ]
@@ -350,6 +348,7 @@ class PandasPrinter:
                     "Collected Amount": round(collected_amount, 2)})
 
         self.sheet_data = [v for _, v in self.sheet_data.items()]
+        print("this is the sheet data",self.sheet_data )
 
     def generate_excd_for_the_range(self,end_date):
         """
@@ -367,9 +366,9 @@ class PandasPrinter:
                 bank=value.mandate.customer.bank_detail.bank.name,
                 expected_amount=value.mandate.amount,
                 expected_date=value.collection_date,
-                start_date=value.mandate.get_start_date,
-                end_date=value.mandate.get_end_date,
-                due_date=value.mandate.get_due_date,
+                start_date=value.mandate.get_start_date.strftime('%d/%b/%Y'),
+                end_date=value.mandate.get_end_date.strftime('%d/%b/%Y'),
+                due_date=value.mandate.get_due_date.strftime('%d/%b/%Y'),
                 paid_rentals=value.mandate.rentals.filter(
                     Q(collection_status=Rental.SUCCESS) |
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
@@ -386,7 +385,7 @@ class PandasPrinter:
         for value in sheet_data:
             key = f"{value.get('id')}"
             if key not in self.sheet_data:
-                self.sheet_data[key] = {
+                self.sheet_data[(key)] = {
                     "Authorization Code": value.get('code'),
                     "Payer Name": value.get('name'),
                     "Payer Email": value.get('email'),

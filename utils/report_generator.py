@@ -9,7 +9,6 @@ from django.db.models import Q
 
 
 class ReportGenerator:
-
     start_date = None
     end_date = None
     printer = None
@@ -74,7 +73,7 @@ class ReportGenerator:
             """ create the report sheet """
             return True
         except Exception as exc:
-            print("The error is ",exc)
+            print("The error is ", exc)
             return False
 
     def resolve_inflow_recieved(self):
@@ -98,11 +97,12 @@ class ReportGenerator:
                 self.end_date
             )
             """ generate the filename """
-
             self.printer.generate_recvd_for_the_range(self.end_date)
+            print("printer data", self.printer.data)
             """ create the report sheet """
             return True
-        except Exception:
+        except Exception as e:
+            print("This is the error", e)
             return False
 
     def resolve_weekly_report(self):
