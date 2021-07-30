@@ -84,7 +84,7 @@ CRONJOBS = [
         'utils.cron.confirm_trials_status',
         '>> /tmp/cron-jobs/collections/confirm_trials_status.log'
     ),
-    # send weekly reports every saturday at 08:00 AM
+    # send weekly reports every Wednesday at 10:00 PM
     (
         '0 22 * * 03',
         'utils.cron.send_weekly_report',
