@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas as pd
 from django.conf import settings
 from django.db.models import Q
@@ -105,7 +107,7 @@ class ExcelPrinter:
             'LAST TRXN. DATE',
             'LAST TRXN. STATUS',
             'SUCCESSFUL PAYMENTS',
-            'NEXT DUE DATE',
+            'LAST DUE DATE',
             'END DATE', ]
 
         response = ExcelPrinter.__format_mandates__(mandates)
@@ -151,7 +153,7 @@ class PandasPrinter:
         self.file_url = ""
 
     def generate_mandates_report(self):
-        print("The values of the sheet",self.sheet_data)
+        print("The values of the sheet", self.sheet_data)
         """
         Generates an excel sheet to display all the mandates
         within a time range
@@ -221,6 +223,7 @@ class PandasPrinter:
                 "Rental Amount": round(v.amount, 2),
                 "Start Date": initial_repayment_date.strftime('%d/%b/%Y'),
                 "End Date": end_date.strftime('%d/%b/%Y'),
+                "Next Due Date": initial_repayment_date.strftime('%d/%b/%Y') + datetime.timedelta(days=30),
                 "Tenor": v.tenure,
                 "Mandate Status": v.status,
                 "Payer Account": v.customer.bank_detail.account_number,
@@ -240,7 +243,7 @@ class PandasPrinter:
                 "Successful Payments": v.rentals.filter(
                     Q(collection_status=Rental.SUCCESS) |
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
-                "Next Due Date": next_due_date,
+                "Last Due Date": next_due_date,
 
             })
 
@@ -332,8 +335,8 @@ class PandasPrinter:
                     "Last TRXN Date": value.get('last_trxn_date'),
                     "Last TRXN Status": value.get('last_trxn_status'),
                     "Start Date": value.get("start_date"),
-                    "End Date": value.get("end_date"),
-                    "Due Date": value.get("due_date"),
+                    "End Date": value.get('end_date'),
+                    "Due Date": value.get('due_date'),
                     "No of Outstanding Rentals": value.get("outstanding_rentals"),
                     "No of Pending Rentals": value.get("pending_rentals"),
                     "Product Type": value.get('product'),
@@ -348,9 +351,9 @@ class PandasPrinter:
                     "Collected Amount": round(collected_amount, 2)})
 
         self.sheet_data = [v for _, v in self.sheet_data.items()]
-        print("this is the sheet data",self.sheet_data )
+        print("this is the sheet data", self.sheet_data)
 
-    def generate_excd_for_the_range(self,end_date):
+    def generate_excd_for_the_range(self, end_date):
         """
         Generates an excel sheet to display all the expected
         payments within a range of dates
@@ -386,6 +389,7 @@ class PandasPrinter:
             key = f"{value.get('id')}"
             if key not in self.sheet_data:
                 self.sheet_data[(key)] = {
+
                     "Authorization Code": value.get('code'),
                     "Payer Name": value.get('name'),
                     "Payer Email": value.get('email'),
@@ -394,7 +398,7 @@ class PandasPrinter:
                     "Expected Amount": round(value.get('expected_amount'), 2),
                     "Start Date": value.get('start_date'),
                     "End Date": value.get('end_date'),
-                    "Due Date": value.get('end_date'),
+                    "Due Date": value.get('due_date'),
                     "Paid Rentals": round(value.get('paid_rentals'), 2),
                     "Pending Rentals": round(value.get('pending_rentals'), 2),
                     "Outstanding Rentals": round(value.get('outstanding_rentals'), 2),
@@ -403,7 +407,6 @@ class PandasPrinter:
                 }
 
             else:
-
 
                 expected_amount = self.sheet_data[key].get(
                     "Expected Amount") + value.get('expected_amount')
@@ -526,7 +529,7 @@ class PandasPrinter:
 
                 data.append(dictionary)
             self.sheet_data = data
-            print("this is the data",data)
+            print("this is the data", data)
             return True
         except Exception as e:
             print(e)

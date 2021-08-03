@@ -62,10 +62,10 @@ class ReportGenerator:
                 between the stipulated period
             """
 
-            self.printer.filename = '{} {}_{}'.format(
+            self.printer.filename = 'Inflow_Report_expected{} {}_{}'.format(
                 self.status,
-                self.start_date,
-                self.end_date
+                self.start_date.strftime('%d-%b-%Y'),
+                self.end_date.strftime('%d-%b-%Y')
             )
             """ generate the filename """
 
@@ -91,10 +91,10 @@ class ReportGenerator:
                 between the stipulated period
             """
 
-            self.printer.filename = '{} {}_{}'.format(
+            self.printer.filename = 'Inflow_Report_received{} {}_{}'.format(
                 self.status,
-                self.start_date,
-                self.end_date
+                self.start_date.strftime('%d-%b-%Y'),
+                self.end_date.strftime('%d-%b-%Y')
             )
             """ generate the filename """
             self.printer.generate_recvd_for_the_range(self.end_date)

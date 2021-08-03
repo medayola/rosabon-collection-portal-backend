@@ -9,6 +9,7 @@ from common.models import Product
 from payment.transaction import PaystackTransaction
 from staff.models import Staff
 
+
 # Create your models here.
 
 
@@ -160,11 +161,10 @@ class Mandate(models.Model):
     @property
     def get_due_date(self):
         """
-            method to get the mandates end date
+            method to get the mandates due date
         """
 
-        return self.initial_repayment_date
-
+        return self.rentals.last().collection_date + datetime.timedelta(days=30)
 
     PAYSTACK = "PAYSTACK"
     REMITTA = "REMITTA"
@@ -426,8 +426,9 @@ class Billing(models.Model):
     Billing Model:
     Model to billing details of a mandate accured by customer
     """
+
     class Meta:
-        ordering = ('id', )
+        ordering = ('id',)
 
     mandate = models.ForeignKey(
         to=Mandate, related_name="billing_details", on_delete=models.CASCADE
