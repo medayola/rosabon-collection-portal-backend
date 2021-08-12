@@ -558,6 +558,7 @@ class UpdateMandateStoppage(graphene.Mutation):
 
                 mandate = review.mandate
                 mandate.status = Mandate.DEACTIVATED
+                mandate.deactivated_date = datetime.today()
                 mandate.save()
 
             review.save()

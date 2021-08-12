@@ -1,5 +1,6 @@
 import datetime
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.utils import timezone
 from django.db import models
@@ -164,7 +165,11 @@ class Mandate(models.Model):
             method to get the mandates due date
         """
 
-        return self.rentals.last().collection_date + datetime.timedelta(days=30)
+        return self.rentals.last().collection_date + relativedelta(months=1)
+
+
+
+
 
     PAYSTACK = "PAYSTACK"
     REMITTA = "REMITTA"
@@ -219,6 +224,8 @@ class Mandate(models.Model):
 
     activated_date = models.DateField(blank=True, null=True)
     """ the date the mandate was activated """
+    deactivated_date = models.DateField(blank=True, null=True)
+    """ the date the mandate was deactivated """
 
     product = models.ForeignKey(
         to=Product,

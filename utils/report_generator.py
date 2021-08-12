@@ -1,4 +1,7 @@
 import datetime as dt
+
+import pudb
+
 from utils.file_printers import PandasPrinter
 
 from mandates.models import Mandate
@@ -97,12 +100,15 @@ class ReportGenerator:
                 self.end_date.strftime('%d-%b-%Y')
             )
             """ generate the filename """
-            self.printer.generate_recvd_for_the_range(self.end_date)
             print("printer data", self.printer.data)
+
+            sheet_data = self.printer.generate_recvd_for_the_range(self.end_date)
+            print("printer data", sheet_data)
             """ create the report sheet """
             return True
         except Exception as e:
             print("This is the error", e)
+            raise e
             return False
 
     def resolve_weekly_report(self):

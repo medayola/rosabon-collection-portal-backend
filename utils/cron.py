@@ -387,10 +387,16 @@ def send_weekly_report():
 
     # send email to
     to = [
-        'a.simon@rosabon-finance.com',
+
         't.odubayo@rosabon-finance.com',
         'i.patrick@rosabon-finance.com',
-        'a.iwelumor@rosabon-finance.com',
+        'ebele.okoli@rosabon-finance.com',
+        'chinedu.elesi@rosabon-finance.com',
+        'omowumi.olaleye@rosabon-finance.com',
+        'boniface.musa@rosabon-finance.com',
+        'esther.adeyinka@rosabon-finance.com',
+        'ijeoma.olisa@rosabon-finance.com',
+        'collections@rosabon-finance.com',
         'fatimah.alayaki@concept-nova.com',
 
     ]

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pandas as pd
+import pudb
 from django.conf import settings
 from django.db.models import Q
 from dateutil.relativedelta import relativedelta
@@ -152,6 +153,26 @@ class PandasPrinter:
         self.media_url = ""
         self.file_url = ""
 
+    def get_lastpayment_date(self, mandate):
+
+        last_payment_date = mandate.rentals.filter(
+            Q(collection_status=Rental.SUCCESS) |
+            Q(collection_status=Rental.MANUAL_SUCCESS)
+
+        ).order_by(
+            '-collection_date'
+        )
+
+        if last_payment_date.exists():
+            last_payment_date = last_payment_date.first().collection_date.strftime(
+                '%d/%b/%Y'
+            )
+
+        else:
+            last_payment_date = "N/A"
+
+        return last_payment_date
+
     def generate_mandates_report(self):
         print("The values of the sheet", self.sheet_data)
         """
@@ -207,6 +228,8 @@ class PandasPrinter:
                 initial_repayment_date = due_date
                 end_date = due_date + relativedelta(months=int(v.tenure))
                 end_date = end_date
+                next_du_date = initial_repayment_date + relativedelta(months=1)
+                next_du_date = next_du_date
 
             created_at = ''
             if v.created_at is not None:
@@ -223,7 +246,7 @@ class PandasPrinter:
                 "Rental Amount": round(v.amount, 2),
                 "Start Date": initial_repayment_date.strftime('%d/%b/%Y'),
                 "End Date": end_date.strftime('%d/%b/%Y'),
-                "Next Due Date": initial_repayment_date.strftime('%d/%b/%Y') + datetime.timedelta(days=30),
+                "Next Due Date": next_du_date.strftime('%d/%b/%Y'),
                 "Tenor": v.tenure,
                 "Mandate Status": v.status,
                 "Payer Account": v.customer.bank_detail.account_number,
@@ -284,6 +307,7 @@ class PandasPrinter:
             "Received amount",
             "Outstanding Rentals",
             "mandate status",
+            "Last Payment Date"
         ]
         """ the headers for the excel sheet """
 
@@ -294,7 +318,7 @@ class PandasPrinter:
         Generates an excel sheet to display all the recieved
         payments within a range of dates
         """
-
+        self.sheet_data = {}
         sheet_data = [
             dict(
                 id=value.rental.mandate.id,
@@ -316,16 +340,18 @@ class PandasPrinter:
                 outstanding_rentals=value.rental.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
                 pending_rentals=value.rental.mandate.rentals.filter(
                     Q(collection_date__lte=end_date, collection_status=Rental.PENDING, )).count(),
-                mandate_status=value.rental.mandate.status
+                mandate_status=value.rental.mandate.status,
+                last_payment_date=self.get_lastpayment_date(value.rental.mandate),
             )
             for key, value in enumerate(self.data)
         ]
-
+        i = 0
         for value in sheet_data:
             key = f"{value.get('id')}"
+            i += 1
             if key not in self.sheet_data:
                 self.sheet_data[key] = {
-
+                    "S/N": i,
                     "Authorization Code": value.get('code'),
                     "Payer Name": str(value.get('name')).title(),
                     "Payer Email": str(value.get('email')).lower(),
@@ -340,7 +366,8 @@ class PandasPrinter:
                     "No of Outstanding Rentals": value.get("outstanding_rentals"),
                     "No of Pending Rentals": value.get("pending_rentals"),
                     "Product Type": value.get('product'),
-                    "Mandate Status": value.get("mandate_status"),
+                    "Mandate Status": value.get('mandate_status'),
+                    "Last Payment Date":value.get('last_payment_date'),
 
                 }
             else:
@@ -351,6 +378,7 @@ class PandasPrinter:
                     "Collected Amount": round(collected_amount, 2)})
 
         self.sheet_data = [v for _, v in self.sheet_data.items()]
+        # return [v for _, v in self.sheet_data.items()]
         print("this is the sheet data", self.sheet_data)
 
     def generate_excd_for_the_range(self, end_date):
@@ -358,7 +386,7 @@ class PandasPrinter:
         Generates an excel sheet to display all the expected
         payments within a range of dates
         """
-
+        self.sheet_data = {}
         sheet_data = [
             dict(
                 id=value.mandate.id,
@@ -380,16 +408,17 @@ class PandasPrinter:
                 outstanding_rentals=value.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
                 product=value.mandate.product.name,
                 mandate_status=value.mandate.status,
-
+                last_payment_date=self.get_lastpayment_date(value.mandate),
             )
             for key, value in enumerate(self.data)
         ]
-
+        i = 0
         for value in sheet_data:
             key = f"{value.get('id')}"
+            i += 1
             if key not in self.sheet_data:
                 self.sheet_data[(key)] = {
-
+                    "S/N": i,
                     "Authorization Code": value.get('code'),
                     "Payer Name": value.get('name'),
                     "Payer Email": value.get('email'),
@@ -404,6 +433,7 @@ class PandasPrinter:
                     "Outstanding Rentals": round(value.get('outstanding_rentals'), 2),
                     "Product Type": value.get('product'),
                     "Mandate Status": value.get('mandate_status'),
+                    "Last Payment Date": value.get('last_payment_date'),
                 }
 
             else:
@@ -428,15 +458,31 @@ class PandasPrinter:
             for k, mandate in enumerate(self.data):
 
                 initial_repayment_date = mandate.initial_repayment_date
+                due_date = initial_repayment_date + relativedelta(months=1)
                 initial_repayment_date = initial_repayment_date.strftime(
-                    '%d/%b/%Y'
-                )
+                    '%d/%b/%Y')
 
                 last_repayment_date = mandate.rentals.order_by(
                     '-collection_date'
                 ).first().collection_date.strftime(
                     '%d/%b/%Y'
                 )
+
+                last_payment_date = mandate.rentals.filter(
+                    Q(collection_status=Rental.SUCCESS) |
+                    Q(collection_status=Rental.MANUAL_SUCCESS)
+
+                ).order_by(
+                    '-collection_date'
+                )
+
+                if last_payment_date.exists():
+                    last_payment_date = last_payment_date.first().collection_date.strftime(
+                        '%d/%b/%Y'
+                    )
+
+                else:
+                    last_payment_date = "N/A"
 
                 expected = mandate.rentals.filter(
                     collection_date__lte=end_date
@@ -510,6 +556,7 @@ class PandasPrinter:
                     "Rental Amount": round(mandate.amount, 2),
                     "Start Date": initial_repayment_date,
                     "End Date": last_repayment_date,
+                    "Due Date": due_date,
                     "Tenor": mandate.tenure,
                     "Expected Rental to date": expected,
                     "Successful via Paystack & Transfer": successfull,
@@ -520,6 +567,8 @@ class PandasPrinter:
                     "No. of Defaults": no_of_defaults,
                     "Last TRXN Date": last_trxn_date,
                     "Last TRXN Status": last_trxn_status,
+                    "Last Payment Date": last_payment_date,
+                    "Mandate Deactivated Date": mandate.deactivated_date,
                     "Initiated comment": mandate_review.get_initial_comment if mandate_review else None,
                     "Approved comment": mandate_review.get_approval_comment if mandate_review else None,
                     "Account officer name": mandate.account_officer.name(),
@@ -552,4 +601,4 @@ class PandasPrinter:
             self.file_url = f"{self.file_url}.xlsx"
             self.filename = f"{self.filename}.xlsx"
             self.media_url = f"{self.media_url}.xlsx"
-            pd.DataFrame(self.sheet_data).to_excel(self.file_url)
+            pd.DataFrame(self.sheet_data).to_excel(self.file_url, index=False)

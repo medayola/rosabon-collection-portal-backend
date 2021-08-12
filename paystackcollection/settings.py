@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@5=4p3zgbecoucli)h@!*0^+-gg*(8oey+lj)zu$62zgsz_ym4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 LOCALHOST = False
 
 
@@ -86,7 +86,7 @@ CRONJOBS = [
     ),
     # send weekly reports every Wednesday at 10:00 PM
     (
-        '0 22 * * 03',
+        '0 22 * * 3',
         'utils.cron.send_weekly_report',
         '>> /tmp/cron-jobs/collections/send_weekly_report.log'
     ),
