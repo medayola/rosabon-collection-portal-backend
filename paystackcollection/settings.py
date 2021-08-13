@@ -28,6 +28,7 @@ DEBUG = False
 LOCALHOST = False
 
 
+
 # Application definition
 INSTALLED_APPS = [
     'corsheaders',

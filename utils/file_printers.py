@@ -458,7 +458,9 @@ class PandasPrinter:
             for k, mandate in enumerate(self.data):
 
                 initial_repayment_date = mandate.initial_repayment_date
-                due_date = initial_repayment_date + relativedelta(months=1)
+                # due_date = initial_repayment_date + relativedelta(months=1)
+
+
                 initial_repayment_date = initial_repayment_date.strftime(
                     '%d/%b/%Y')
 
@@ -482,7 +484,7 @@ class PandasPrinter:
                     )
 
                 else:
-                    last_payment_date = "N/A"
+                    last_payment_date = " "
 
                 expected = mandate.rentals.filter(
                     collection_date__lte=end_date
@@ -536,8 +538,8 @@ class PandasPrinter:
                         ]
                     )
 
-                    last_trxn_date = trials.first().created_at
-                    last_trxn_status = trials.first().status
+                    last_trxn_date = trials.last().updated_at
+                    last_trxn_status = trials.last().status
 
 
                 else:
@@ -555,8 +557,8 @@ class PandasPrinter:
                     "Product": mandate.product,
                     "Rental Amount": round(mandate.amount, 2),
                     "Start Date": initial_repayment_date,
-                    "End Date": last_repayment_date,
-                    "Due Date": due_date,
+                    "Final End Date": last_repayment_date,
+                    "Due Date": mandate.get_due_date.strftime('%d/%b/%Y'),
                     "Tenor": mandate.tenure,
                     "Expected Rental to date": expected,
                     "Successful via Paystack & Transfer": successfull,
