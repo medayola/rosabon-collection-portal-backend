@@ -19,7 +19,7 @@ class ReportGenerator:
 
     def __init__(self):
         self.end_date = dt.datetime.today()
-        self.start_date = self.end_date - dt.timedelta(days=8)
+        self.start_date = self.end_date - dt.timedelta(days=6)
 
         self.printer = PandasPrinter()
         """ the file creator or printer class """
