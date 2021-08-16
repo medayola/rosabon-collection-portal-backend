@@ -163,12 +163,10 @@ class PandasPrinter:
         )
 
         if last_payment_date.exists():
-            last_payment_date = last_payment_date.first().collection_date.strftime(
-                '%d/%b/%Y'
-            )
+            last_payment_date = last_payment_date.first().collection_date
 
         else:
-            last_payment_date = "N/A"
+            last_payment_date = None
 
         return last_payment_date
 
@@ -244,8 +242,9 @@ class PandasPrinter:
                 "Product": v.product.name,
                 "Rental Amount": round(v.amount, 2),
                 "Start Date": initial_repayment_date.strftime('%d/%b/%Y'),
+                "Next Due Date": (self.get_lastpayment_date(v) + relativedelta(months=1)).strftime(
+                    '%d/%b/%Y') if self.get_lastpayment_date(v) else None,
                 "End Date": end_date.strftime('%d/%b/%Y'),
-                "Next Due Date": next_du_date.strftime('%d/%b/%Y'),
                 "Tenor": v.tenure,
                 "Mandate Status": v.status,
                 "Payer Account": v.customer.bank_detail.account_number,
@@ -329,8 +328,9 @@ class PandasPrinter:
                 collected_amount=value.collected_amount,
                 product=value.rental.mandate.product.name,
                 start_date=value.rental.mandate.get_start_date.strftime('%d/%b/%Y'),
+                due_date=(self.get_lastpayment_date(value.rental.mandate) + relativedelta(months=1)).strftime(
+                    '%d/%b/%Y') if self.get_lastpayment_date(value.rental.mandate) else None,
                 end_date=value.rental.mandate.get_end_date.strftime('%d/%b/%Y'),
-                due_date=value.rental.mandate.get_due_date.strftime('%d/%b/%Y'),
                 last_trxn_date=value.created_at.strftime('%d/%b/%Y'),
                 last_trxn_status=value.status,
                 paid_rentals=value.rental.mandate.rentals.filter(
@@ -340,7 +340,7 @@ class PandasPrinter:
                 pending_rentals=value.rental.mandate.rentals.filter(
                     Q(collection_date__lte=end_date, collection_status=Rental.PENDING, )).count(),
                 mandate_status=value.rental.mandate.status,
-                last_payment_date=self.get_lastpayment_date(value.rental.mandate),
+                last_payment_date=self.get_lastpayment_date(value.rental.mandate).strftime('%d/%b/%Y') if self.get_lastpayment_date(value.rental.mandate) else None,
             )
             for key, value in enumerate(self.data)
         ]
@@ -360,8 +360,8 @@ class PandasPrinter:
                     "Last TRXN Date": value.get('last_trxn_date'),
                     "Last TRXN Status": value.get('last_trxn_status'),
                     "Start Date": value.get("start_date"),
-                    "End Date": value.get('end_date'),
                     "Due Date": value.get('due_date'),
+                    "End Date": value.get('end_date'),
                     "No of Outstanding Rentals": value.get("outstanding_rentals"),
                     "No of Pending Rentals": value.get("pending_rentals"),
                     "Product Type": value.get('product'),
@@ -398,7 +398,8 @@ class PandasPrinter:
                 expected_date=value.collection_date,
                 start_date=value.mandate.get_start_date.strftime('%d/%b/%Y'),
                 end_date=value.mandate.get_end_date.strftime('%d/%b/%Y'),
-                due_date=value.mandate.get_due_date.strftime('%d/%b/%Y'),
+                due_date=(self.get_lastpayment_date(value.mandate) + relativedelta(months=1)).strftime(
+                    '%d/%b/%Y') if self.get_lastpayment_date(value.mandate) else None,
                 paid_rentals=value.mandate.rentals.filter(
                     Q(collection_status=Rental.SUCCESS) |
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
@@ -407,7 +408,7 @@ class PandasPrinter:
                 outstanding_rentals=value.mandate.rentals.filter(Q(collection_status=Rental.PENDING)).count(),
                 product=value.mandate.product.name,
                 mandate_status=value.mandate.status,
-                last_payment_date=self.get_lastpayment_date(value.mandate),
+                last_payment_date=self.get_lastpayment_date(value.mandate).strftime('%d/%b/%Y') if self.get_lastpayment_date(value.mandate) else None,
             )
             for key, value in enumerate(self.data)
         ]
@@ -425,8 +426,8 @@ class PandasPrinter:
                     "Branch": value.get('branch'),
                     "Expected Amount": round(value.get('expected_amount'), 2),
                     "Start Date": value.get('start_date'),
-                    "End Date": value.get('end_date'),
                     "Due Date": value.get('due_date'),
+                    "End Date": value.get('end_date'),
                     "Paid Rentals": round(value.get('paid_rentals'), 2),
                     "Pending Rentals": round(value.get('pending_rentals'), 2),
                     "Outstanding Rentals": round(value.get('outstanding_rentals'), 2),
@@ -457,7 +458,7 @@ class PandasPrinter:
             for k, mandate in enumerate(self.data):
 
                 initial_repayment_date = mandate.initial_repayment_date
-                # due_date = initial_repayment_date + relativedelta(months=1)
+
 
 
                 initial_repayment_date = initial_repayment_date.strftime(
@@ -478,12 +479,11 @@ class PandasPrinter:
                 )
 
                 if last_payment_date.exists():
-                    last_payment_date = last_payment_date.first().collection_date.strftime(
-                        '%d/%b/%Y'
-                    )
+                    last_payment_date = last_payment_date.first().collection_date
+
 
                 else:
-                    last_payment_date = " "
+                    last_payment_date = None
 
                 expected = mandate.rentals.filter(
                     collection_date__lte=end_date
@@ -556,8 +556,9 @@ class PandasPrinter:
                     "Product": mandate.product,
                     "Rental Amount": round(mandate.amount, 2),
                     "Start Date": initial_repayment_date,
+                    "Due Date": (last_payment_date + relativedelta(months=1)).strftime(
+                    '%d/%b/%Y') if last_payment_date else None,
                     "Final End Date": last_repayment_date,
-                    "Due Date": mandate.get_due_date.strftime('%d/%b/%Y'),
                     "Tenor": mandate.tenure,
                     "Expected Rental to date": expected,
                     "Successful via Paystack & Transfer": successfull,
@@ -568,7 +569,9 @@ class PandasPrinter:
                     "No. of Defaults": no_of_defaults,
                     "Last TRXN Date": last_trxn_date,
                     "Last TRXN Status": last_trxn_status,
-                    "Last Payment Date": last_payment_date,
+                    "Last Payment Date": last_payment_date.strftime(
+                    '%d/%b/%Y') if last_payment_date else
+                    None,
                     "Mandate Deactivated Date": mandate.deactivated_date,
                     "Initiated comment": mandate_review.get_initial_comment if mandate_review else None,
                     "Approved comment": mandate_review.get_approval_comment if mandate_review else None,
