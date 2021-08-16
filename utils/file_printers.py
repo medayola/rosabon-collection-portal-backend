@@ -242,9 +242,10 @@ class PandasPrinter:
                 "Product": v.product.name,
                 "Rental Amount": round(v.amount, 2),
                 "Start Date": initial_repayment_date.strftime('%d/%b/%Y'),
-                "Next Due Date": (self.get_lastpayment_date(v) + relativedelta(months=1)).strftime(
+                "Due Date": (self.get_lastpayment_date(v) + relativedelta(months=1)).strftime(
                     '%d/%b/%Y') if self.get_lastpayment_date(v) else None,
                 "End Date": end_date.strftime('%d/%b/%Y'),
+                "Last_Payment_Date":self.get_lastpayment_date(v),
                 "Tenor": v.tenure,
                 "Mandate Status": v.status,
                 "Payer Account": v.customer.bank_detail.account_number,
@@ -264,7 +265,7 @@ class PandasPrinter:
                 "Successful Payments": v.rentals.filter(
                     Q(collection_status=Rental.SUCCESS) |
                     Q(collection_status=Rental.MANUAL_SUCCESS)).count(),
-                "Last Due Date": next_due_date,
+
 
             })
 
