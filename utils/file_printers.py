@@ -234,6 +234,7 @@ class PandasPrinter:
 
             self.sheet_data.append({
                 "Authorization Code": v.authorization_code,
+                "ERP ID": v.erp_id,
                 "Bank": v.customer.bank_detail.bank,
                 "Branch": v.customer.branch,
                 "Customer Name": v.customer.fullname(),
@@ -322,6 +323,7 @@ class PandasPrinter:
             dict(
                 id=value.rental.mandate.id,
                 code=value.rental.mandate.authorization_code,
+                erp_id=value.rental.mandate.erp_id,
                 name=value.rental.mandate.customer.fullname(),
                 email=value.rental.mandate.customer.email(),
                 bank=value.rental.mandate.customer.bank_detail.bank.name,
@@ -353,6 +355,7 @@ class PandasPrinter:
                 self.sheet_data[key] = {
                     "S/N": i,
                     "Authorization Code": value.get('code'),
+                    "ERP ID" : value.get('erp_id'),
                     "Payer Name": str(value.get('name')).title(),
                     "Payer Email": str(value.get('email')).lower(),
                     "Payer Bank": value.get('bank'),
@@ -391,6 +394,7 @@ class PandasPrinter:
             dict(
                 id=value.mandate.id,
                 code=value.mandate.authorization_code,
+                erp_id=value.mandate.erp_id,
                 name=str(value.mandate.customer.fullname()).title(),
                 email=value.mandate.customer.email(),
                 branch=value.mandate.customer.branch,
@@ -421,6 +425,7 @@ class PandasPrinter:
                 self.sheet_data[(key)] = {
                     "S/N": i,
                     "Authorization Code": value.get('code'),
+                    "ERP ID" : value.get('erp_id'),
                     "Payer Name": value.get('name'),
                     "Payer Email": value.get('email'),
                     "Payer Bank": value.get('bank'),
@@ -549,6 +554,7 @@ class PandasPrinter:
 
                 dictionary = {
                     "Authorization Code": mandate.authorization_code,
+                    "ERP ID": mandate.erp_id,
                     "Bank": mandate.customer.bank_detail.bank,
                     "Branch": mandate.customer.branch,
                     "Customer Name": mandate.customer.fullname(),

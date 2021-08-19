@@ -310,7 +310,7 @@ class WeeklyReport:
         self.generator = ReportGenerator()
 
     def get_start_date(self):
-        return self.end_date + datetime.timedelta(-7)
+        return self.end_date + datetime.timedelta(-6)
 
     def generate_doc(self, print_text=False):
         self.generator.end_date = self.end_date
@@ -398,6 +398,9 @@ def send_weekly_report():
         'ijeoma.olisa@rosabon-finance.com',
         'collections@rosabon-finance.com',
         'fatimah.alayaki@concept-nova.com',
+        # 'medayola@gmail.com',
+        'jabir.ibrahim@concept-nova.com',
+        # 'eljabs8@gmail.com',
 
     ]
 
@@ -412,4 +415,4 @@ def send_weekly_report():
         to=to
     )
     message.attach_file(weekly_report.generator.printer.file_url)
-    message.send(fail_silently=True)
+    message.send(fail_silently=False)

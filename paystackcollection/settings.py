@@ -87,7 +87,7 @@ CRONJOBS = [
     ),
     # send weekly reports every Wednesday at 10:00 PM
     (
-        '0 22 * * 3',
+        '0 22 * * 7',
         'utils.cron.send_weekly_report',
         '>> /tmp/cron-jobs/collections/send_weekly_report.log'
     ),

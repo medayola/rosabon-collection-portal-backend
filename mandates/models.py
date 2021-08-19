@@ -205,6 +205,8 @@ class Mandate(models.Model):
 
     code = models.CharField(max_length=100, blank=True, null=True)
     """ code such as mandate id code for remita """
+    erp_id = models.CharField(max_length=200, blank=True, null=True)
+    """ code such as erp id code from ERP System """
 
     code_url = models.CharField(max_length=200, blank=True, null=True)
     """ access code such as extra code field """
@@ -226,6 +228,7 @@ class Mandate(models.Model):
     """ the date the mandate was activated """
     deactivated_date = models.DateField(blank=True, null=True)
     """ the date the mandate was deactivated """
+
 
     product = models.ForeignKey(
         to=Product,
