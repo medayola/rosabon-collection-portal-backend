@@ -186,7 +186,7 @@ USE_TZ = True
 
 
 EMAIL_HOST = 'smtp.pepipost.com'
-EMAIL_PORT = '587'
+EMAIL_PORT = '22'
 EMAIL_HOST_USER = 'rosabon'
 EMAIL_HOST_PASSWORD = 'rosabon_a3ff18828b58fc335aeb9b8212df9890'
 EMAIL_USE_TLS = True
