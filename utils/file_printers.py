@@ -574,12 +574,13 @@ class PandasPrinter:
                     "Partial Payment": partial,
                     "Amount Collected": amount_collected,
                     "No. of Defaults": no_of_defaults,
-                    "Last TRXN Date": last_trxn_date,
+                    "Last TRXN Date": last_trxn_date.strftime('%d/%b/%Y') if last_trxn_date else None,
                     "Last TRXN Status": last_trxn_status,
                     "Last Payment Date": last_payment_date.strftime(
                     '%d/%b/%Y') if last_payment_date else
                     None,
-                    "Mandate Deactivated Date": mandate.deactivated_date,
+                    "Mandate Deactivated Date": mandate.deactivated_date.strftime(
+                    '%d/%b/%Y') if mandate.deactivated_date else None,
                     "Initiated comment": mandate_review.get_initial_comment if mandate_review else None,
                     "Approved comment": mandate_review.get_approval_comment if mandate_review else None,
                     "Account officer name": mandate.account_officer.name(),
