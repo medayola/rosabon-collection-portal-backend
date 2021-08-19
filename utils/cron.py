@@ -398,7 +398,7 @@ def send_weekly_report():
         'ijeoma.olisa@rosabon-finance.com',
         'collections@rosabon-finance.com',
         'fatimah.alayaki@concept-nova.com',
-        # 'medayola@gmail.com',
+        'medayola@gmail.com',
         'jabir.ibrahim@concept-nova.com',
         # 'eljabs8@gmail.com',
 
