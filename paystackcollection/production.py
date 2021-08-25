@@ -206,7 +206,10 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost",
+    "http://localhost:*",
+    "http://localhost:3002",
+    "http://localhost:3001",
+    "http://localhost:3000",
     "https://localhost",
     "http://159.65.37.127",
     "https://159.65.37.127",
