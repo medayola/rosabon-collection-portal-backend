@@ -216,6 +216,7 @@ PAYSTACK_INITIAL_FEE = 5000  # 50 NGN
 
 RENTAL_WIDTH_IN_DAYS = 60
 FRONT_END = 'http://157.245.8.141/collections'
+#FRONT_END = 'https://treasury-dev.concept-nova.com/collections'
 
 STATIC_URL = '/collections.static/'
 MEDIA_URL = '/collections.media/'
