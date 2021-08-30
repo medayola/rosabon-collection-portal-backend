@@ -204,6 +204,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:3000",
     "http://localhost:3001",
     "http://127.0.0.1:3001",
+    "http://127.0.0.1:3002",
 ]
 
 PAYSTACK_AUTHORIZATION_KEY = 'sk_test_f19608000e260b953cc4af43a6054eac641738b7'
@@ -215,7 +216,8 @@ PAYSTACK_INITIAL_FEE = 5000  # 50 NGN
 
 
 RENTAL_WIDTH_IN_DAYS = 60
-FRONT_END = 'http://157.245.8.141/collections'
+# FRONT_END = 'http://157.245.8.141/collections'
+FRONT_END = 'https://coll.concept-nova.com/'
 #FRONT_END = 'https://treasury-dev.concept-nova.com/collections'
 
 STATIC_URL = '/collections.static/'
