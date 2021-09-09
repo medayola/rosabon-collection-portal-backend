@@ -27,6 +27,9 @@ SECRET_KEY = '@5=4p3zgbecoucli)h@!*0^+-gg*(8oey+lj)zu$62zgsz_ym4'
 DEBUG = True
 LOCALHOST = False
 
+#Settings for Staging DB is True, fALSE
+#Settings for Prod is False, False and Local is True,True
+
 
 
 # Application definition
