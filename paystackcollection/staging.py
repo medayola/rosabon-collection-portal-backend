@@ -197,7 +197,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '.concept-nova.com',
-    '.concept-nova.com.':,
+    '.concept-nova.com.',
     'https://coll.concept-nova.com',
     'http://localhost:3003'
 
