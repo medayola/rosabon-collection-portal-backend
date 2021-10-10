@@ -40,6 +40,7 @@ class MandateMutation(graphene.Mutation):
         rentals = graphene.List(graphene.String, required=True)
         authorization_code = graphene.String()
         is_active = graphene.Boolean(required=True)
+        erp_id = graphene.String()
 
     id = graphene.ID()
     success = graphene.Boolean(required=True)
@@ -61,6 +62,7 @@ class MandateMutation(graphene.Mutation):
 
         __customer__ = input.get('customer')
         __account_officer__ = input.get('account_officer')
+
         __rentals__ = (
             datetime.strptime(
                 "{}-{}-{}".format(
@@ -140,6 +142,7 @@ class MandateMutation(graphene.Mutation):
             __mandate__.product = product
             __mandate__.created_by = Staff.objects.get(user=info.context.user)
             __mandate__.payment_option = input.get('payment_option')
+            __mandate__.erp_id = input.get('erp_id',None)
             __mandate__.is_new = is_new
 
             __form_type__ = FormType.objects.get(
@@ -160,6 +163,7 @@ class MandateMutation(graphene.Mutation):
             __review__.code = __mandate__.code
             __review__.code_url = __mandate__.code_url
             __review__.authorization_code = __mandate__.authorization_code
+            __review__.erp_id = __mandate__.erp_id
 
             __review__.foward()
             __review__.save()
