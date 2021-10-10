@@ -196,14 +196,20 @@ ALLOWED_HOSTS = [
     '157.245.8.141',
     '127.0.0.1',
     'localhost',
+    '.concept-nova.com',
+    '.concept-nova.com.':,
+    'https://coll.concept-nova.com',
+    'http://localhost:3003'
+
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://157.245.8.141",
-    "http://localhost:3000",
+    "http://localhost:3003",
     "http://127.0.0.1:3000",
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
+    "https://coll.concept-nova.com",
+    ".concept-nova.com",
+    ".concept-nova.com."
 ]
 
 PAYSTACK_AUTHORIZATION_KEY = 'sk_test_f19608000e260b953cc4af43a6054eac641738b7'
@@ -215,7 +221,8 @@ PAYSTACK_INITIAL_FEE = 5000  # 50 NGN
 
 
 RENTAL_WIDTH_IN_DAYS = 60
-FRONT_END = 'http://157.245.8.141/collections'
+FRONT_END = 'https://coll.concept-nova.com/'
+
 
 STATIC_URL = '/collections.static/'
 MEDIA_URL = '/collections.media/'

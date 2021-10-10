@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@5=4p3zgbecoucli)h@!*0^+-gg*(8oey+lj)zu$62zgsz_ym4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 LOCALHOST = False
 
 
@@ -169,37 +169,68 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "info@rosabon-finance.com"
 DEFAULT_FROM_NAME = "-- COLLECTIONS --"
 
+#DATABASES = {
+    #'default': {
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #'NAME': 'collections_june_12_2020_08_17',
+        #'HOST': 'localhost',
+        #'USER': 'collector',
+        #'PASSWORD': 'Aut0m@tedPassc0d3s',
+        #'PORT': '',
+       # 'TEST': {
+      #      'MIRROR': 'replica'
+     #   }
+    #},
+    #'replica': {
+        #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       # 'NAME': 'collections',
+      #  'HOST': 'postgres',
+    #    'USER': 'collections',
+   #    'PASSWORD': '',
+  #      'PORT': '5432'
+ #   }
+#}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'collections_june_12_2020_08_17',
+        'NAME': 'collections_march_13_2020_09_48',
         'HOST': 'localhost',
-        'USER': 'collector',
-        'PASSWORD': 'Aut0m@tedPassc0d3s',
-        'PORT': '',
-        'TEST': {
-            'MIRROR': 'replica'
-        }
+        'USER': 'vxtcj5QTKVVgh88C',
+        'PASSWORD': '5UofE0dP44cLIh87#csOBhQm7qLQ5nEMD',
+        'PORT': ''
     },
     'replica': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'collections',
-        'HOST': 'postgres',
-        'USER': 'collections',
-        'PASSWORD': '',
-        'PORT': '5432'
-    }
+        'NAME': 'collections_march_13_2020_09_48',
+        'HOST': 'localhost',
+        'USER': 'vxtcj5QTKVVgh88C',
+        'PASSWORD': '5UofE0dP44cLIh87#csOBhQm7qLQ5nEMD',
+        'PORT': '',
+        'TEST': {
+            'MIRROR': 'default'
+            }
+    },
 }
+
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
     '159.65.37.127',
     'collections.rosabon-finance.com',
-    'collections-api.rosabon-finance.com'
+    'collections-api.rosabon-finance.com',
+    'https://coll.concept-nova.com',
+    '.concept-nova.com',
+    '.concept-nova.com.',
+    'http://localhost:3003'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'collections.rosabon-finance.com',
+    'coll.concept-nova.com',
+    '.concept-nova.com',
+    '.concept-nova.com.',
+    'http://localhost:3003/'
 ]
 
 
@@ -207,7 +238,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:*",
-    "http://localhost:3002",
+    "http://localhost:3003",
     "http://localhost:3001",
     "http://localhost:3000",
     "https://localhost",
@@ -217,6 +248,7 @@ CORS_ORIGIN_WHITELIST = [
     'https://www.collections.rosabon-finance.com',
     'http://collections.rosabon-finance.com',
     'http://www.collections.rosabon-finance.com',
+    'https://coll.concept-nova.com'
 ]
 
 PAYSTACK_AUTHORIZATION_KEY = 'sk_live_d2e9f62db60f0234935c81e421dfb0c8343314ab'
@@ -229,8 +261,9 @@ PAYSTACK_INITIAL_FEE = 5000  # 50.00 NGN
 
 
 RENTAL_WIDTH_IN_DAYS = 60
-FRONT_END = 'http://collections.rosabon-finance.com'
+#FRONT_END = 'http://collections.rosabon-finance.com'
 # FRONT_END = 'http://159.65.37.127/collections'
+FRONT_END = 'https://coll.concept-nova.com/'
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
