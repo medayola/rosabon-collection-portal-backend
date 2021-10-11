@@ -194,22 +194,14 @@ DEFAULT_FROM_NAME = "-- COLLECTIONS --"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'collections_march_13_2020_09_48',
+        'NAME': 'collections_june_12_2020_08_17',
         'HOST': 'localhost',
-        'USER': 'vxtcj5QTKVVgh88C',
-        'PASSWORD': '5UofE0dP44cLIh87#csOBhQm7qLQ5nEMD',
-        'PORT': ''
-    },
-    'replica': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'collections_march_13_2020_09_48',
-        'HOST': 'localhost',
-        'USER': 'vxtcj5QTKVVgh88C',
-        'PASSWORD': '5UofE0dP44cLIh87#csOBhQm7qLQ5nEMD',
+        'USER': 'collector',
+        'PASSWORD': 'Aut0m@tedPassc0d3s',
         'PORT': '',
         'TEST': {
-            'MIRROR': 'default'
-            }
+            'MIRROR': 'replica'
+        }
     },
 }
 
